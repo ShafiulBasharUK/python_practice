@@ -1,0 +1,16 @@
+pv = float(input('Enter the amount of funds you would like to invest today in dollars (Present Value (PV): )'))
+rate = float(input('Enter the annual interest rate: '))
+fv = float(input('Enter the total dollar amount you would like to have in the future (Future Value (FV)): '))
+
+print('The Present Value (PV) in year 0 (now) =${}'.format(round(pv, 1)))
+
+year = 1
+
+while True:
+    pv = pv + (pv*rate)
+    print('Future Value (FV) in year {} = ${}'.format(year, round(pv, 1)))
+    
+    if pv > fv:
+        print('It would take around {} years to reach a future value greater than ${}'.format(year, round(fv, 1)))
+        break
+    year = year + 1
