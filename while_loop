@@ -1,16 +1,6 @@
-pv = float(input('Enter the amount of funds you would like to invest today in dollars (Present Value (PV): )'))
-rate = float(input('Enter the annual interest rate: '))
-fv = float(input('Enter the total dollar amount you would like to have in the future (Future Value (FV)): '))
-
-print('The Present Value (PV) in year 0 (now) =${}'.format(round(pv, 1)))
-
-year = 1
-
-while True:
-    pv = pv + (pv*rate)
-    print('Future Value (FV) in year {} = ${}'.format(year, round(pv, 1)))
-    
-    if pv > fv:
-        print('It would take around {} years to reach a future value greater than ${}'.format(year, round(fv, 1)))
-        break
-    year = year + 1
+INSERT INTO tblOPP_DATA 
+( PERIOD_CODE, GRAND_PARENT_CODE, CHILD_CODE, PARENT_CODE, PRODUCT, OPP_DATA_CODE, GRADE_CODE, EMP_TYPE_CODE, FTE )
+SELECT tblPERIODS.[%PERIOD_NUMBER], tblPARENTS_NAMES.GRAND_PARENT_CODE, tblCHILD_NAMES.CHILD_CODE, tblPARENTS_NAMES.ORDER, tblDEMAND.PRODUCT, 5 AS OPP_DATA_CODE, tblGRADES.GRADE_ORDER, 1 AS EMP_TYPE_CODE, Sum(tblDEMAND.DEMAND_FTE) AS DEMAND_FTE
+FROM ((((tblDEMAND LEFT JOIN tblGRADES ON tblDEMAND.GRADE = tblGRADES.SHORT_GRADE) LEFT JOIN qryPRODUCT_LIST ON tblDEMAND.PRODUCT = qryPRODUCT_LIST.PRODUCT) LEFT JOIN tblPERIODS ON tblDEMAND.PERIOD = tblPERIODS.dteMONTH) LEFT JOIN tblPARENTS_NAMES ON qryPRODUCT_LIST.DIR = tblPARENTS_NAMES.OPP_ABBREV) LEFT JOIN tblCHILD_NAMES ON qryPRODUCT_LIST.CHILD_DIRECTORATE = tblCHILD_NAMES.CHILD_NAME
+GROUP BY tblPERIODS.[%PERIOD_NUMBER], tblPARENTS_NAMES.GRAND_PARENT_CODE, tblCHILD_NAMES.CHILD_CODE, tblPARENTS_NAMES.ORDER, tblDEMAND.PRODUCT, 5, tblGRADES.GRADE_ORDER, 1
+HAVING (((tblPERIODS.[%PERIOD_NUMBER])<61) AND ((Sum(tblDEMAND.DEMAND_FTE))<>0));
